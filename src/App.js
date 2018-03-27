@@ -5,6 +5,11 @@ import * as BookMapper from './BookMapper';
 import * as BooksAPI from './BooksAPI';
 
 class BooksApp extends React.Component {
+  constructor() {
+    super();
+    this.handleOptionSelection = this.handleOptionSelection.bind(this);
+  }
+
   state = {
     currentlyReading: [],
     wantToRead: [],
@@ -20,7 +25,14 @@ class BooksApp extends React.Component {
   }
 
   componentDidMount() {
+    this.getBooks();
+    console.log('componentDidMount');
+  }
+
+  getBooks() {
     BooksAPI.getAll().then((books) => this.sortBooksBySection(books));
+    console.log('getBooks');
+
   }
 
   sortBooksBySection = (books) => {
@@ -79,7 +91,7 @@ class BooksApp extends React.Component {
                     <h2 className="bookshelf-title">Currently Reading</h2>
                     <div className="bookshelf-books">
                       <ol className="books-grid">
-                        {BookMapper.mapToBookItems(this.state.currentlyReading)}
+                        {BookMapper.mapToBookItems(this.state.currentlyReading, this.handleOptionSelection)}
                       </ol>
                     </div>
                   </div>
@@ -87,7 +99,7 @@ class BooksApp extends React.Component {
                     <h2 className="bookshelf-title">Want to Read</h2>
                     <div className="bookshelf-books">
                       <ol className="books-grid">
-                        {BookMapper.mapToBookItems(this.state.wantToRead)}
+                        {BookMapper.mapToBookItems(this.state.wantToRead, this.handleOptionSelection)}
                       </ol>
                     </div>
                   </div>
@@ -95,7 +107,7 @@ class BooksApp extends React.Component {
                     <h2 className="bookshelf-title">Read</h2>
                     <div className="bookshelf-books">
                       <ol className="books-grid">
-                        {BookMapper.mapToBookItems(this.state.read)}
+                        {BookMapper.mapToBookItems(this.state.read, this.handleOptionSelection)}
                       </ol>
                     </div>
                   </div>
@@ -109,6 +121,14 @@ class BooksApp extends React.Component {
       </div>
     )
   }
+
+  handleOptionSelection = (book, shelf) => {
+    console.log(book, shelf);
+    BooksAPI.update(book, shelf).then(() => {
+      this.getBooks()
+    });
+  }
+
 }
 
 export default BooksApp

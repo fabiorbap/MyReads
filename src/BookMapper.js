@@ -1,14 +1,13 @@
 import React from 'react'
 import { BookItem } from './BookItem';
 
-export const mapToBookItems = (books) => {
-    console.log(books);
+export const mapToBookItems = (books, handleOptionSelection) => {
     return books.map((book, key) => {
-        return(
+        return (
             <li key={key}>
-                <BookItem backgroundImage={book.imageLinks.thumbnail}
-                    bookTitle={book.title}
-                    bookAuthors={book.authors} />
+                <BookItem
+                    book={book}
+                    handleClickEvent={handleOptionSelection} />
             </li>
         );
     });
