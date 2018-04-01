@@ -8,12 +8,14 @@ class BooksApp extends React.Component {
   constructor() {
     super();
     this.handleOptionSelection = this.handleOptionSelection.bind(this);
+    this.handleUserInput = this.handleUserInput.bind(this);
   }
 
   state = {
     currentlyReading: [],
     wantToRead: [],
     read: [],
+    search: [],
 
     /**
      * TODO: Instead of using this state variable to keep track of which page
@@ -26,12 +28,10 @@ class BooksApp extends React.Component {
 
   componentDidMount() {
     this.getBooks();
-    console.log('componentDidMount');
   }
 
   getBooks() {
     BooksAPI.getAll().then((books) => this.sortBooksBySection(books));
-    console.log('getBooks');
 
   }
 
@@ -54,10 +54,10 @@ class BooksApp extends React.Component {
       }
     });
     this.setState({ currentlyReading: currentlyReading, wantToRead: wantToRead, read: read });
-
   }
 
   render() {
+    console.log(this.state.search);
     return (
       <div className="app">
         {this.state.showSearchPage ? (
@@ -73,11 +73,13 @@ class BooksApp extends React.Component {
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                <input type="text" placeholder="Search by title or author" />
+                <input onChange={this.handleUserInput} type="text" placeholder="Search by title or author" />
               </div>
             </div>
             <div className="search-books-results">
-              <ol className="books-grid"></ol>
+              <ol className="books-grid">
+                {BookMapper.mapToBookItems(this.state.search, this.handleOptionSelection)}
+              </ol>
             </div>
           </div>
         ) : (
@@ -129,6 +131,14 @@ class BooksApp extends React.Component {
     });
   }
 
+
+  handleUserInput = (event) => {
+    BooksAPI.search(event.target.value).then(books => {
+      this.setState({ search: books });
+    }
+    );
+  }
 }
+
 
 export default BooksApp
