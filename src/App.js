@@ -134,7 +134,11 @@ class BooksApp extends React.Component {
 
   handleUserInput = (event) => {
     BooksAPI.search(event.target.value).then(books => {
-      this.setState({ search: books });
+      if (books) {
+        this.setState({ search: books });
+      } else {
+        this.setState({ search: [] });
+      }  
     }
     );
   }
