@@ -124,8 +124,22 @@ class BooksApp extends React.Component {
     )
   }
 
+  compareBookShelves = (books) => {
+    var allBooks = this.state.currentlyReading.concat(this.state.read, this.state.wantToRead);
+    return books.map(book => {
+      var matchedBook = allBooks.find(bookInShelf => {
+        return book.id === bookInShelf.id;
+      });
+      if (matchedBook) {
+        return matchedBook;
+      } else {
+        book.shelf = 'none';
+        return book;
+      }
+    });
+  }
+
   handleOptionSelection = (book, shelf) => {
-    console.log(book, shelf);
     BooksAPI.update(book, shelf).then(() => {
       this.getBooks()
     });
@@ -135,7 +149,7 @@ class BooksApp extends React.Component {
   handleUserInput = (event) => {
     BooksAPI.search(event.target.value).then(books => {
       if (books) {
-        this.setState({ search: books });
+        this.setState({ search: this.compareBookShelves(books) });
       } else {
         this.setState({ search: [] });
       }  

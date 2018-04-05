@@ -17,9 +17,9 @@ export class BookItem extends React.Component {
                 <div className="book-top">
                     <div className="book-cover" style={{ width: width, height: height, backgroundImage: `url("${this.props.book.imageLinks.thumbnail}")` }}></div>
                     <div className="book-shelf-changer">
-                        <select value={this.props.book.shelf ? this.props.book.shelf : 'none'} onChange={this.handleChange}>
+                        <select value={this.props.book.shelf} onChange={this.handleChange}>
                             {/* TODO: use value as index for optionsArray */}
-                            <option value="none" disabled>Move to...</option>
+                            <option value="moveTo" disabled>Move to...</option>
                             <option value="currentlyReading">Currently reading</option>
                             <option value="wantToRead">Want to read</option>
                             <option value="read">Read</option>
