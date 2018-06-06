@@ -5,11 +5,7 @@ import * as BookMapper from './BookMapper';
 import * as BooksAPI from './BooksAPI';
 
 class BooksApp extends React.Component {
-  constructor() {
-    super();
-    this.handleOptionSelection = this.handleOptionSelection.bind(this);
-    this.handleUserInput = this.handleUserInput.bind(this);
-  }
+  userInput = '';
 
   state = {
     currentlyReading: [],
@@ -30,7 +26,7 @@ class BooksApp extends React.Component {
     this.getBooks();
   }
 
-  getBooks() {
+  getBooks = () => {
     BooksAPI.getAll().then((books) => this.sortBooksBySection(books));
 
   }
@@ -57,7 +53,6 @@ class BooksApp extends React.Component {
   }
 
   render() {
-    console.log(this.state.search);
     return (
       <div className="app">
         {this.state.showSearchPage ? (
@@ -142,20 +137,39 @@ class BooksApp extends React.Component {
   handleOptionSelection = (book, shelf) => {
     BooksAPI.update(book, shelf).then(() => {
       this.getBooks()
-    });
+        if(this.userInput){
+          BooksAPI.search(this.userInput).then(books => {
+            console.log('search', books);
+            if (books) {
+              this.setState({ search: this.compareBookShelves(books) });
+            } else {
+              this.setState({ search: [] });
+            }
+          }
+          );
+      }
+      });
+      
   }
 
 
   handleUserInput = (event) => {
-    BooksAPI.search(event.target.value).then(books => {
+    this.userInput = event.target.value
+    if(event.target.value){
+      BooksAPI.search(event.target.value).then(books => {
       if (books) {
-        this.setState({ search: this.compareBookShelves(books) });
+        //TODO: ver porque tá dando erro aqui, quando não acha nenhum livro
+        this.setState({ search: this.compareBookShelves(books)});
       } else {
         this.setState({ search: [] });
-      }  
+      }
     }
     );
+  } else {
+    this.setState({ search: [] });
+
   }
+}
 }
 
 

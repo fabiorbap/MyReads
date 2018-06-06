@@ -2,8 +2,8 @@ import React from 'react'
 import { BookItem } from './BookItem';
 
 export const mapToBookItems = (books, handleOptionSelection) => {
+    if(books){
     return books.map((book, key) => {
-        console.log('book shelf', book.shelf);
         return (
             <li key={key}>
                 <BookItem
@@ -13,4 +13,5 @@ export const mapToBookItems = (books, handleOptionSelection) => {
             </li>
         );
     });
+}
 }

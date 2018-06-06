@@ -11,11 +11,10 @@ export class BookItem extends React.Component {
     }
 
     render() {
-        console.log('render ' + this.props.book.shelf);
         return (
             <div className="book">
                 <div className="book-top">
-                    <div className="book-cover" style={{ width: width, height: height, backgroundImage: `url("${this.props.book.imageLinks.thumbnail}")` }}></div>
+                    <div className="book-cover" style={{ width: width, height: height, backgroundImage: this.props.book.imageLinks ? `url("${this.props.book.imageLinks.thumbnail}")` : ''}}></div>
                     <div className="book-shelf-changer">
                         <select value={this.props.book.shelf} onChange={this.handleChange}>
                             {/* TODO: use value as index for optionsArray */}
