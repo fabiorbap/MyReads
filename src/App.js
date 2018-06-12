@@ -157,12 +157,11 @@ class BooksApp extends React.Component {
     this.userInput = event.target.value
     if(event.target.value){
       BooksAPI.search(event.target.value).then(books => {
-      if (books) {
-        //TODO: ver porque tá dando erro aqui, quando não acha nenhum livro
+      if (books.length > 0) {
         this.setState({ search: this.compareBookShelves(books)});
-      } else {
-        this.setState({ search: [] });
-      }
+       } else {
+          this.setState({ search: [] });
+        }
     }
     );
   } else {
