@@ -27,14 +27,28 @@ export class BookItem extends React.Component {
                     </div>
                 </div>
                 <div className="book-title">{this.props.book.title}</div>
-                <div className="book-authors">{this.props.book.authors}</div>
+                <div className="book-authors">{
+                    this.props.book.authors ? this.formatAuthorsNames(this.props.book.authors) : ''
+                    }</div>
             </div>
         );
     }
 
     handleChange = (event) => {
-        console.log(event.target.value);
         this.props.handleClickEvent(this.props.book, event.target.value);
+    }
+
+    formatAuthorsNames = (authors) => {
+        var formattedAuthors = [];
+        for(var i = 0; i < authors.length; i++) {
+            if(i !== authors.length - 1){
+             formattedAuthors.push(authors[i] += ', ');
+            }
+         else {
+            formattedAuthors.push(authors[i]);
+        }
+    }
+        return formattedAuthors;
     }
 
 }
